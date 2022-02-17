@@ -1,8 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid} from "react-native";
-import {KeyboardAccessoryView} from "react-native-keyboard-accessory";
+import React, {useRef, useState} from 'react';
+import {
+    FlatList,
+    Image,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
+    ToastAndroid,
+} from "react-native";
+import BottomSheet from 'reanimated-bottom-sheet';
 import {FontAwesome} from '@expo/vector-icons';
-import {ListItem} from "../components";
+import {ListItem, KeyboardAlphabet} from "../components";
 
 const icon = require('../assets/scales.png')
 
@@ -12,9 +20,10 @@ const randomId = () => {
 
 
 const ListScreen = () => {
-    const [text, onChangeText] = useState('');
+    const [text, onChangeText] = useState('Ghee');
     const [text2, onChangeText2] = useState('');
     const [type, setType] = useState('name');
+    const [visible, setVisible] = useState(false);
 
     const [data, setData] = useState([
             {
@@ -32,20 +41,21 @@ const ListScreen = () => {
     const input1Ref = useRef();
     const input2Ref = useRef();
 
-    useEffect(() => {
-        Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-        Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+    const sheetRef = useRef(null);
 
-        // cleanup function
-        return () => {
-            Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-            Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-        };
-    }, [])
+    const onOpenSheet = () => {
+        if (sheetRef.current) {
+            setVisible(true);
+            sheetRef.current.snapTo(1);
+        }
+    }
 
-    const [keyboardStatus, setKeyboardStatus] = useState(undefined);
-    const _keyboardDidShow = () => setKeyboardStatus('Keyboard Shown');
-    const _keyboardDidHide = () => setKeyboardStatus('Keyboard Hidden');
+    const onCloseSheet = () => {
+        if (sheetRef.current) {
+            setVisible(false);
+            sheetRef.current.snapTo(0);
+        }
+    }
 
     const goToQty = () => {
         if (text === '') {
@@ -55,145 +65,168 @@ const ListScreen = () => {
                 ToastAndroid.CENTER
             )
         } else {
-            setType('unit')
+            setType('unit');
+            onOpenSheet();
         }
     }
 
     const submitToList = (name, qty,) => {
-            if (qty === '') {
-                ToastAndroid.showWithGravity(
-                    "Quantity cannot be left blank",
-                    ToastAndroid.CENTER,
-                    ToastAndroid.SHORT
-                )
-            } else {
-                setData([...data, {
-                    id: randomId(),
-                    name,
-                    qty
-                }])
-            }
+        if (qty === '') {
+            ToastAndroid.showWithGravity(
+                "Quantity cannot be left blank",
+                ToastAndroid.CENTER,
+                ToastAndroid.SHORT
+            )
+        } else {
+            setData([...data, {
+                id: randomId(),
+                name,
+                qty
+            }])
+        }
         setType('name');
         onChangeText('');
         onChangeText2('');
     }
-
     const deleteFromList = (id) => {
         const newList = data.filter(item => item.id !== id);
         setData(newList);
     }
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.scrollStyle}>
-                <FlatList
-                    data={data}
-                    keyExtractor={item => item.id}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({item, index}) => (
-                        <ListItem
-                            position={index + 1}
-                            name={item.name}
-                            qty={item.qty}
-                            onPress={() => deleteFromList(item.id)}
-                        />
-                    )}
-                />
+    const sheetContent = () => {
+        return (
+            <View style={styles.mediumContainer}>
+                <KeyboardAlphabet />
             </View>
-            <View
-                style={type === 'unit' && keyboardStatus === 'Keyboard Shown' ? [styles.floatingTextView, {bottom: 60}] : styles.floatingTextView}>
-                {
-                    type === 'name'
-                        ? <>
-                            <TextInput
-                                ref={input1Ref}
-                                value={text}
-                                placeholder={"Product Name"}
-                                onChangeText={(t) => onChangeText(t)}
-                                style={styles.inputStyle}
-                                keyboardType={'default'}
-                            />
-                            <TouchableOpacity
-                                style={styles.moveButtonStyle}
-                                onPress={goToQty}
-                            >
-                                <Image
-                                    source={icon}
-                                    tintColor={'white'}
-                                    style={styles.iconStyle}
-                                />
-                            </TouchableOpacity>
-                        </>
-                        : <>
-                            <TextInput
-                                ref={input2Ref}
-                                value={text2}
-                                placeholder={"Quantity - Unit"}
-                                onChangeText={t => onChangeText2(t)}
-                                style={styles.inputStyle}
-                                keyboardType={'decimal-pad'}
-                            />
-                            <TouchableOpacity
-                                style={styles.moveButtonStyle}
-                                onPress={() => submitToList(text, text2)}
-                            >
-                                <FontAwesome name="send" size={28} color="white" />
-                            </TouchableOpacity>
-                        </>
-                }
+        )
+    }
 
+    return (
+        <>
+            <View style={styles.container}>
+                <View style={styles.scrollStyle}>
+                    <FlatList
+                        data={data}
+                        keyExtractor={item => item.id}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({item, index}) => (
+                            <ListItem
+                                position={index + 1}
+                                name={item.name}
+                                qty={item.qty}
+                                onPress={() => deleteFromList(item.id)}
+                            />
+                        )}
+                    />
+                </View>
+                <View
+                    style={visible ? [styles.floatingTextView, {marginBottom: 300}] : styles.floatingTextView}>
+                    {
+                        type === 'name'
+                            ? <>
+                                <TextInput
+                                    ref={input1Ref}
+                                    value={text}
+                                    onFocus={onOpenSheet}
+                                    onBlur={onCloseSheet}
+                                    showSoftInputOnFocus={false}
+                                    placeholder={"Product Name"}
+                                    onChangeText={(t) => onChangeText(t)}
+                                    style={styles.inputStyle}
+                                    keyboardType={'default'}
+                                />
+                                <TouchableOpacity
+                                    style={styles.moveButtonStyle}
+                                    onPress={goToQty}
+                                >
+                                    <Image
+                                        source={icon}
+                                        tintColor={'white'}
+                                        style={styles.iconStyle}
+                                    />
+                                </TouchableOpacity>
+                            </>
+                            : <>
+                                <TextInput
+                                    ref={input2Ref}
+                                    value={text2}
+                                    onFocus={onOpenSheet}
+                                    onBlur={onCloseSheet}
+                                    showSoftInputOnFocus={false}
+                                    placeholder={"Quantity - Unit"}
+                                    onChangeText={t => onChangeText2(t)}
+                                    style={styles.inputStyle}
+                                    keyboardType={'decimal-pad'}
+                                />
+                                <TouchableOpacity
+                                    style={styles.moveButtonStyle}
+                                    onPress={() => submitToList(text, text2)}
+                                >
+                                    <FontAwesome name="send" size={28} color="white"/>
+                                </TouchableOpacity>
+                            </>
+                    }
+                </View>
+                {/*<KeyboardAccessoryView androidAdjustResize>*/}
+                {/*    {*/}
+                {/*        type === 'unit'*/}
+                {/*            ? <View style={styles.keyboardViewStyle}>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("₹")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>₹</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("khula")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>khula</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("ml")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>ml</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("Lt")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>Lt</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("Pkt")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>Pkt</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("gm")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>gm</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*                <TouchableOpacity*/}
+                {/*                    style={styles.buttonStyle}*/}
+                {/*                    onPress={() => addUnit("KG")}*/}
+                {/*                >*/}
+                {/*                    <Text style={styles.buttonText}>Kg</Text>*/}
+                {/*                </TouchableOpacity>*/}
+                {/*            </View>*/}
+                {/*            : null*/}
+                {/*    }*/}
+                {/*</KeyboardAccessoryView>*/}
             </View>
-            <KeyboardAccessoryView androidAdjustResize>
-                {
-                    type === 'unit'
-                        ? <View style={styles.keyboardViewStyle}>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("₹")}
-                            >
-                                <Text style={styles.buttonText}>₹</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("khula")}
-                            >
-                                <Text style={styles.buttonText}>khula</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("ml")}
-                            >
-                                <Text style={styles.buttonText}>ml</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("Lt")}
-                            >
-                                <Text style={styles.buttonText}>Lt</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("Pkt")}
-                            >
-                                <Text style={styles.buttonText}>Pkt</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("gm")}
-                            >
-                                <Text style={styles.buttonText}>gm</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                onPress={() => addUnit("KG")}
-                            >
-                                <Text style={styles.buttonText}>Kg</Text>
-                            </TouchableOpacity>
-                        </View>
-                        : null
-                }
-            </KeyboardAccessoryView>
-        </View>
+            <BottomSheet
+                ref={sheetRef}
+                snapPoints={[0, 300]}
+                initialSnap={0}
+                enabledContentGestureInteraction={false}
+                enabledContentTapInteraction={false}
+                renderContent={sheetContent}
+            />
+        </>
     )
 }
 
@@ -249,10 +282,9 @@ const styles = StyleSheet.create({
     },
     floatingTextView: {
         width: "100%",
-        position: 'absolute',
         paddingBottom: 10,
         paddingHorizontal: 5,
-        bottom: 0,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center'
@@ -277,7 +309,11 @@ const styles = StyleSheet.create({
         elevation: 1.2,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    mediumContainer: {
+        height: 300,
+        backgroundColor: '#510a8c',
+    },
 })
 
 export default ListScreen;
