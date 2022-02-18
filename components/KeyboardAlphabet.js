@@ -1,226 +1,153 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     View,
     Text,
-    TouchableNativeFeedback,
     TouchableOpacity,
     StyleSheet,
+    Image
 } from "react-native";
-import {Feather, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons';
+import {Feather, FontAwesome} from '@expo/vector-icons';
+import {shift, shift_active, caps} from "../constants/icons";
+
+const row0 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+const row1 = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
+const row2 = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
+const row3 = ['z', 'x', 'c', 'v', 'b', 'n', 'm'];
 
 const KeyboardAlphabet = () => {
+
+    const [keyState, setKeyState] = useState('shift');
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const renderIcon = () => {
+        if (keyState === 'shift') {
+            return shift
+        } else if (keyState === 'shift_active') {
+            return shift_active
+        } else {
+            return caps
+        }
+    }
+
+    const handleShiftPress = () => {
+        if (keyState === 'shift') {
+            setKeyState('shift_active')
+        } else {
+            setKeyState('shift')
+        }
+    }
+
+    const handleShiftHold = () => {
+        setKeyState('caps')
+    }
+
+    const handleKeyPress = (c) => {
+        if (keyState === 'shift') {
+            return c
+        } else if (keyState === 'shift_active') {
+            setKeyState('shift')
+            return c.toUpperCase();
+        } else {
+            return c.toUpperCase();
+        }
+    }
+
+    const ModalView = (c) => {
+        return (
+            <View style={styles.modalStyle}>
+                <Text style={styles.modalText}>
+                    {c}
+                </Text>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <View style={[styles.row, {marginBottom: 10}]}>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        1
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        2
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        3
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        4
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        5
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        6
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        7
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        8
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        9
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.text, {fontSize: 20}]}>
-                        0
-                    </Text>
-                </View>
+                {
+                    row0.map(c => (
+                        <>
+                            {
+                                modalVisible
+                                    ? ModalView(c)
+                                    : null
+                            }
+                            <TouchableOpacity
+                                key={c}
+                                onPress={() => console.log(c)}
+                            >
+                                <View style={styles.buttonContainer}>
+                                    <Text style={[styles.text, {fontSize: 20}]}>
+                                        {c}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </>
+                    ))
+                }
             </View>
             <View style={styles.row}>
-                <TouchableOpacity onPress={() => console.log('q')}>
-                    <View style={styles.buttonContainer}>
-                        <Text style={styles.text}>
-                            q
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        w
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        e
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        r
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        t
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        y
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        u
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        i
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        o
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        p
-                    </Text>
-                </View>
+                {
+                    row1.map(c => (
+                        <TouchableOpacity
+                            key={c}
+                            onPress={() => console.log(handleKeyPress(c))}
+                        >
+                            <View style={styles.buttonContainer}>
+                                <Text style={styles.text}>
+                                    {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                }
             </View>
             <View style={styles.row}>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        a
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        s
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        d
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        f
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        g
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        h
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        j
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        k
-                    </Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        l
-                    </Text>
-                </View>
+                {
+                    row2.map(c => (
+                        <TouchableOpacity
+                            key={c}
+                            onPress={() => console.log(handleKeyPress(c))}
+                        >
+                            <View style={styles.buttonContainer}>
+                                <Text style={styles.text}>
+                                    {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                }
             </View>
             <View style={[styles.row, {paddingHorizontal: 10}]}>
-                <View style={{
-                    flex: 1,
-                    ...styles.buttonContainer
-                }}>
-                    <MaterialCommunityIcons name="apple-keyboard-shift" size={30} color="white"/>
-                </View>
+                <TouchableOpacity
+                    onPress={handleShiftPress}
+                    onLongPress={handleShiftHold}
+                    style={{
+                        flex: 1,
+                        ...styles.buttonContainer
+                    }}
+                >
+                    <Image
+                        source={renderIcon()}
+                        style={styles.shiftIcon}
+                    />
+                </TouchableOpacity>
                 <View style={styles.rowContainer}>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                z
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                x
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                c
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                v
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                b
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                n
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('q')}>
-                        <View style={styles.buttonContainer}>
-                            <Text style={styles.text}>
-                                m
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        row3.map(c => (
+                            <TouchableOpacity
+                                key={c}
+                                onPress={() => console.log(handleKeyPress(c))}
+                            >
+                                <View style={styles.buttonContainer}>
+                                    <Text style={styles.text}>
+                                        {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    }
                 </View>
                 <View style={{
                     flex: 1,
@@ -309,6 +236,22 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 10
+    },
+    shiftIcon: {
+        width: 22,
+        height: 22,
+        resizeMode: 'cover'
+    },
+    modalStyle: {
+        height: "90%",
+        width: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
+    modalText: {
+        fontSize: 30,
+        color: '#5f0fa2'
     }
 })
 

@@ -24,7 +24,8 @@
     "react-native-web": "0.17.1",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "react-native-gesture-handler": "~2.1.0",
-    "react-native-reanimated": "~2.3.1"
+    "react-native-reanimated": "~2.3.1",
+    "expo-av": "~10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
