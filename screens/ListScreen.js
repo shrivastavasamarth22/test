@@ -9,8 +9,8 @@ import {
     ToastAndroid,
 } from "react-native";
 import BottomSheet from 'reanimated-bottom-sheet';
-import {FontAwesome} from '@expo/vector-icons';
-import {ListItem, KeyboardAlphabet} from "../components";
+import {FontAwesome, AntDesign} from '@expo/vector-icons';
+import {ListItem, KeyboardAlphabet, KeyboardNumeric} from "../components";
 
 const icon = require('../assets/scales.png')
 
@@ -33,10 +33,6 @@ const ListScreen = () => {
             }
         ]
     )
-
-    const addUnit = (unit) => {
-        onChangeText2(text => text + " " + unit)
-    }
 
     const input1Ref = useRef();
     const input2Ref = useRef();
@@ -96,7 +92,9 @@ const ListScreen = () => {
     const sheetContent = () => {
         return (
             <View style={styles.mediumContainer}>
-                <KeyboardAlphabet />
+                {
+                    type === 'name' ? <KeyboardAlphabet /> : <KeyboardNumeric />
+                }
             </View>
         )
     }
@@ -160,63 +158,13 @@ const ListScreen = () => {
                                 />
                                 <TouchableOpacity
                                     style={styles.moveButtonStyle}
-                                    onPress={() => submitToList(text, text2)}
+                                    onPress={() => setType('name')}
                                 >
-                                    <FontAwesome name="send" size={28} color="white"/>
+                                    <AntDesign name="back" size={24} color="white" />
                                 </TouchableOpacity>
                             </>
                     }
                 </View>
-                {/*<KeyboardAccessoryView androidAdjustResize>*/}
-                {/*    {*/}
-                {/*        type === 'unit'*/}
-                {/*            ? <View style={styles.keyboardViewStyle}>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("₹")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>₹</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("khula")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>khula</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("ml")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>ml</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("Lt")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>Lt</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("Pkt")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>Pkt</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("gm")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>gm</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*                <TouchableOpacity*/}
-                {/*                    style={styles.buttonStyle}*/}
-                {/*                    onPress={() => addUnit("KG")}*/}
-                {/*                >*/}
-                {/*                    <Text style={styles.buttonText}>Kg</Text>*/}
-                {/*                </TouchableOpacity>*/}
-                {/*            </View>*/}
-                {/*            : null*/}
-                {/*    }*/}
-                {/*</KeyboardAccessoryView>*/}
             </View>
             <BottomSheet
                 ref={sheetRef}
@@ -239,15 +187,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         flex: 1,
         paddingHorizontal: 20
-    },
-
-    keyboardViewStyle: {
-        width: "100%",
-        height: 60,
-        backgroundColor: "#273138",
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
     },
     buttonStyle: {
         flex: 1,
@@ -312,7 +251,7 @@ const styles = StyleSheet.create({
     },
     mediumContainer: {
         height: 300,
-        backgroundColor: '#510a8c',
+        backgroundColor: '#e4e5ea',
     },
 })
 

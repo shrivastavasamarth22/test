@@ -4,7 +4,7 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
-    Image
+    Image,
 } from "react-native";
 import {Feather, FontAwesome} from '@expo/vector-icons';
 import {shift, shift_active, caps} from "../constants/icons";
@@ -18,6 +18,7 @@ const KeyboardAlphabet = () => {
 
     const [keyState, setKeyState] = useState('shift');
     const [modalVisible, setModalVisible] = useState(false)
+    const [lang, setLang] = useState('en');
 
     const renderIcon = () => {
         if (keyState === 'shift') {
@@ -54,7 +55,9 @@ const KeyboardAlphabet = () => {
 
     const ModalView = (c) => {
         return (
-            <View style={styles.modalStyle}>
+            <View
+                style={styles.modalStyle}
+            >
                 <Text style={styles.modalText}>
                     {c}
                 </Text>
@@ -64,78 +67,67 @@ const KeyboardAlphabet = () => {
 
     return (
         <View style={styles.container}>
-            <View style={[styles.row, {marginBottom: 10}]}>
+            <View style={styles.langContainer}>
                 {
-                    row0.map(c => (
+                    lang === 'en' ?
                         <>
-                            {
-                                modalVisible
-                                    ? ModalView(c)
-                                    : null
-                            }
+                            <View style={styles.selectedBox}>
+                                <Text style={[styles.text, {fontSize: 18}]}>
+                                    abc
+                                </Text>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.selectableBox}
+                                onPress={() => setLang('hi')}
+                            >
+                                <Text style={[styles.text, {fontSize: 26, color: '#fafafa'}]}>
+                                    अ
+                                </Text>
+                            </TouchableOpacity>
+                        </>
+                        :
+                        <>
+                            <TouchableOpacity
+                                style={styles.selectableBox}
+                                onPress={() => setLang('en')}
+                            >
+                                <Text style={[styles.text, {fontSize: 18, color: '#fafafa'}]}>
+                                    abc
+                                </Text>
+                            </TouchableOpacity>
+                            <View
+                                style={styles.selectedBox}
+                            >
+                                <Text style={[styles.text, {fontSize: 26}]}>
+                                    अ
+                                </Text>
+                            </View>
+                        </>
+                }
+
+            </View>
+            <View style={{
+                flex: 1
+            }}>
+                <View style={styles.row}>
+                    {
+                        row0.map(c => (
                             <TouchableOpacity
                                 key={c}
                                 onPress={() => console.log(c)}
                             >
                                 <View style={styles.buttonContainer}>
-                                    <Text style={[styles.text, {fontSize: 20}]}>
+                                    <Text style={styles.text}>
                                         {c}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                        </>
-                    ))
-                }
-            </View>
-            <View style={styles.row}>
-                {
-                    row1.map(c => (
-                        <TouchableOpacity
-                            key={c}
-                            onPress={() => console.log(handleKeyPress(c))}
-                        >
-                            <View style={styles.buttonContainer}>
-                                <Text style={styles.text}>
-                                    {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))
-                }
-            </View>
-            <View style={styles.row}>
-                {
-                    row2.map(c => (
-                        <TouchableOpacity
-                            key={c}
-                            onPress={() => console.log(handleKeyPress(c))}
-                        >
-                            <View style={styles.buttonContainer}>
-                                <Text style={styles.text}>
-                                    {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))
-                }
-            </View>
-            <View style={[styles.row, {paddingHorizontal: 10}]}>
-                <TouchableOpacity
-                    onPress={handleShiftPress}
-                    onLongPress={handleShiftHold}
-                    style={{
-                        flex: 1,
-                        ...styles.buttonContainer
-                    }}
-                >
-                    <Image
-                        source={renderIcon()}
-                        style={styles.shiftIcon}
-                    />
-                </TouchableOpacity>
-                <View style={styles.rowContainer}>
+                        ))
+                    }
+                </View>
+                <View style={styles.row}>
                     {
-                        row3.map(c => (
+                        row1.map(c => (
                             <TouchableOpacity
                                 key={c}
                                 onPress={() => console.log(handleKeyPress(c))}
@@ -149,31 +141,81 @@ const KeyboardAlphabet = () => {
                         ))
                     }
                 </View>
-                <View style={{
-                    flex: 1,
-                    ...styles.buttonContainer
-                }}>
-                    <Feather name="delete" size={24} color="white"/>
+                <View style={styles.row}>
+                    {
+                        row2.map(c => (
+                            <TouchableOpacity
+                                key={c}
+                                onPress={() => console.log(handleKeyPress(c))}
+                            >
+                                <View style={styles.buttonContainer}>
+                                    <Text style={styles.text}>
+                                        {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    }
                 </View>
-            </View>
-            <View style={styles.row}>
-                <View style={styles.spacer}/>
-                <View style={styles.buttonContainer}>
-                    <Text style={styles.text}>
-                        .
-                    </Text>
+                <View style={[styles.row, {paddingHorizontal: 10}]}>
+                    <TouchableOpacity
+                        onPress={handleShiftPress}
+                        onLongPress={handleShiftHold}
+                        style={{
+                            flex: 1,
+                            ...styles.buttonContainer
+                        }}
+                    >
+                        <Image
+                            source={renderIcon()}
+                            style={styles.shiftIcon}
+                        />
+                    </TouchableOpacity>
+                    <View style={styles.rowContainer}>
+                        {
+                            row3.map(c => (
+                                <TouchableOpacity
+                                    key={c}
+                                    onPress={() => console.log(handleKeyPress(c))}
+                                >
+                                    <View style={styles.buttonContainer}>
+                                        <Text style={styles.text}>
+                                            {keyState === 'shift_active' || keyState === 'caps' ? c.toUpperCase() : c}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))
+                        }
+                    </View>
+                    <TouchableOpacity style={{
+                        flex: 1,
+                        ...styles.buttonContainer
+                    }}>
+                        <Feather name="delete" size={24} color="#262626"/>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.actionContainer}>
-                    <FontAwesome name="search" size={24} color="white"/>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.buttonText}>
-                            View
-                        </Text>
-                        <Text style={styles.buttonText}>
-                            Products
+                <View style={styles.row}>
+                    <TouchableOpacity style={styles.micButton}>
+                        <FontAwesome name="microphone" size={24} color="#262626" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.spacer}/>
+                    <View style={styles.buttonContainer}>
+                        <Text style={styles.text}>
+                            .
                         </Text>
                     </View>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionContainer}>
+                        <FontAwesome name="search" size={24} color="#262626"/>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.buttonText}>
+                                View
+                            </Text>
+                            <Text style={styles.buttonText}>
+                                Products
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     )
@@ -182,14 +224,32 @@ const KeyboardAlphabet = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 5
+    },
+    langContainer: {
+        width: "100%",
+        height: 45,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    selectedBox: {
+        height: "100%",
+        width: 80,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fafafa',
+    },
+    selectableBox: {
+        height: "100%",
+        width: 80,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     row: {
         width: "100%",
-        height: "19%",
+        height: "20%",
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     rowContainer: {
         flex: 5.5,
@@ -202,21 +262,19 @@ const styles = StyleSheet.create({
         width: 35,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#5f0fa2',
+        backgroundColor: '#fafafa',
         borderRadius: 3,
-        elevation: 3,
-        marginHorizontal: 2
+        marginHorizontal: 2,
     },
     text: {
         fontSize: 26,
-        color: 'white'
+        color: '#262626'
     },
     spacer: {
         width: "50%",
         height: "85%",
-        backgroundColor: '#5f0fa2',
+        backgroundColor: '#fafafa',
         borderRadius: 3,
-        elevation: 3,
         marginHorizontal: 2,
     },
     actionContainer: {
@@ -234,7 +292,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     buttonText: {
-        color: 'white',
+        color: '#262626',
         fontSize: 10
     },
     shiftIcon: {
@@ -247,11 +305,21 @@ const styles = StyleSheet.create({
         width: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     modalText: {
         fontSize: 30,
-        color: '#5f0fa2'
+        color: '#5f0fa2',
+        borderRadius: 5
+    },
+    micButton: {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fafafa',
+        marginRight: 5
     }
 })
 

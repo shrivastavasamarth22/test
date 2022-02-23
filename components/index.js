@@ -1,3 +1,4 @@
 import ListItem from "./ListItem";
 import KeyboardAlphabet from "./KeyboardAlphabet";
-export {ListItem, KeyboardAlphabet}
+import KeyboardNumeric from "./KeyboardNumeric";
+export {ListItem, KeyboardAlphabet, KeyboardNumeric}
