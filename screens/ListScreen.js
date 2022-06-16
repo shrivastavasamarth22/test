@@ -93,7 +93,7 @@ const ListScreen = () => {
         return (
             <View style={styles.mediumContainer}>
                 {
-                    type === 'name' ? <KeyboardAlphabet /> : <KeyboardNumeric />
+                    type === 'name' ? <KeyboardAlphabet/> : <KeyboardNumeric/>
                 }
             </View>
         )
@@ -147,21 +147,16 @@ const ListScreen = () => {
                             : <>
                                 <TextInput
                                     ref={input2Ref}
-                                    value={text2}
+                                    value={text + " - " + text2}
                                     onFocus={onOpenSheet}
                                     onBlur={onCloseSheet}
                                     showSoftInputOnFocus={false}
                                     placeholder={"Quantity - Unit"}
                                     onChangeText={t => onChangeText2(t)}
-                                    style={styles.inputStyle}
+                                    style={[styles.inputStyle, {width: "100%"}]}
                                     keyboardType={'decimal-pad'}
                                 />
-                                <TouchableOpacity
-                                    style={styles.moveButtonStyle}
-                                    onPress={() => setType('name')}
-                                >
-                                    <AntDesign name="back" size={24} color="white" />
-                                </TouchableOpacity>
+
                             </>
                     }
                 </View>
@@ -221,30 +216,28 @@ const styles = StyleSheet.create({
     },
     floatingTextView: {
         width: "100%",
-        paddingBottom: 10,
-        paddingHorizontal: 5,
-        marginBottom: 10,
+        padding: 5,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     inputStyle: {
         width: "80%",
         borderRadius: 30,
-        height: 55,
+        height: 50,
         paddingLeft: 20,
         backgroundColor: 'white',
         borderWidth: 0.5,
-        borderColor: '#ccc',
+        borderColor: '#262626',
         fontSize: 16,
-        color: '#505050',
-        elevation: 1.2
+        color: '#262626',
+        elevation: 1.2,
     },
     moveButtonStyle: {
-        width: 60,
-        height: 60,
+        width: 52,
+        height: 52,
         backgroundColor: '#ff9d00',
-        borderRadius: 30,
+        borderRadius: 26,
         elevation: 1.2,
         alignItems: 'center',
         justifyContent: 'center'
@@ -253,6 +246,10 @@ const styles = StyleSheet.create({
         height: 300,
         backgroundColor: '#e4e5ea',
     },
+    inputContainer: {
+        width: "100%",
+
+    }
 })
 
 export default ListScreen;

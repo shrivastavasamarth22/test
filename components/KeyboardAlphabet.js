@@ -205,12 +205,12 @@ const KeyboardAlphabet = () => {
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.actionContainer}>
-                        <FontAwesome name="search" size={24} color="#262626"/>
+                        <FontAwesome name="search" size={24} color="#999"/>
                         <View style={styles.textContainer}>
-                            <Text style={styles.buttonText}>
+                            <Text style={[styles.buttonText, {color: "#999"}]}>
                                 View
                             </Text>
-                            <Text style={styles.buttonText}>
+                            <Text style={[styles.buttonText, {color: "#999"}]}>
                                 Products
                             </Text>
                         </View>
