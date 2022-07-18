@@ -20,6 +20,14 @@ const Home = ({ navigation }) => {
                     List Test
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+                style={{marginBottom: 10}}
+                onPress={() => navigation.navigate("Animation Test")}
+            >
+                <Text style={styles.text}>
+                    Animation Test
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
