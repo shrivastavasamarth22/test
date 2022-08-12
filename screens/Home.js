@@ -28,6 +28,22 @@ const Home = ({ navigation }) => {
                     Animation Test
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+                style={{marginBottom: 10}}
+                onPress={() => navigation.navigate("Scroll To Index Animation Test")}
+            >
+                <Text style={styles.text}>
+                    Scroll To Index Animation Test
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{marginBottom: 10}}
+                onPress={() => navigation.navigate("Animated Header Screen")}
+            >
+                <Text style={styles.text}>
+                    Animated Header Screen
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
