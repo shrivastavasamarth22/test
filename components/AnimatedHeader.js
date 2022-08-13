@@ -7,10 +7,12 @@ const AnimatedHeader = () => {
 
     return (
         <View style={{
-            position: "absolute",
+            position: 'absolute',
             top: Constant.statusBarHeight,
             left: 0,
             right: 0,
+            // marginTop: Constant.statusBarHeight,
+            // width: "100%",
             height: 65,
             backgroundColor: "white",
             flexDirection: "row",
