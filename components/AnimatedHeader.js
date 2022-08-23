@@ -11,8 +11,6 @@ const AnimatedHeader = () => {
             top: Constant.statusBarHeight,
             left: 0,
             right: 0,
-            // marginTop: Constant.statusBarHeight,
-            // width: "100%",
             height: 65,
             backgroundColor: "black",
             flexDirection: "row",
