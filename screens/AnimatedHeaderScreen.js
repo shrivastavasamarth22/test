@@ -14,11 +14,13 @@ const AnimatedHeaderScreen = () => {
     return (
         <View style={styles.container}>
             <StatusBar style="light" backgroundColor={"black"}/>
-            <View
+            <Animated.View
                 style={{
-                    // transform: [
-                    //     {translateY}
-                    // ],
+                    transform: [
+                        {translateY}
+                    ],
+                    height: 70,
+                    backgroundColor: 'red'
                 }}
             >
                 <AnimatedHeader/>
@@ -29,13 +31,13 @@ const AnimatedHeaderScreen = () => {
                 }}>
                     These are some video suggestions :
                 </Text>
-            </View>
+            </Animated.View>
 
             <FlatList
                 data={customData}
                 contentContainerStyle={{
                     paddingHorizontal: 10,
-                    paddingTop: 100
+                    paddingTop: 70
                 }}
                 renderItem={({item}) => {
                     return(
@@ -48,9 +50,9 @@ const AnimatedHeaderScreen = () => {
                 }}
 
                 keyExtractor={item => item.id}
-                // onScroll={(e)=>{
-                //     scrollY.setValue(e.nativeEvent.contentOffset.y)
-                // }}
+                onScroll={(e)=>{
+                    scrollY.setValue(e.nativeEvent.contentOffset.y)
+                }}
             />
         </View>
     )

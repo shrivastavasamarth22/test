@@ -14,7 +14,7 @@ const AnimatedHeader = () => {
             // marginTop: Constant.statusBarHeight,
             // width: "100%",
             height: 65,
-            backgroundColor: "white",
+            backgroundColor: "black",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: 'center',
@@ -32,7 +32,7 @@ const AnimatedHeader = () => {
                 <Text style={{
                     fontSize: 20,
                     marginLeft: 5,
-                    color: "black",
+                    color: "white",
                     fontWeight: "bold",
                 }}>
                     YouTube
@@ -45,19 +45,16 @@ const AnimatedHeader = () => {
                 margin: 5,
             }}>
                 <TouchableOpacity
-                    style={{
-                        padding: 5,
-                    }}
                     onPress={() => console.log("Button Pressed")}
                 >
-                    <Ionicons name="md-videocam" size={32} color={"#1d1d1d" }/>
+                    <Ionicons name="md-videocam" size={32} color={"#ccc" }/>
                 </TouchableOpacity>
 
-                <Ionicons name="md-search" size={32} color={"#1d1d1d"}/>
+                <Ionicons name="md-search" size={32} color={"#ccc"}/>
                 <MaterialIcons
                     name="account-circle"
                     size={32}
-                    color={"#1d1d1d"}
+                    color={"#ccc"}
                 />
             </View>
         </View>
