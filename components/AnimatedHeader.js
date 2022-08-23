@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import Constant from 'expo-constants'
 import {AntDesign, Ionicons, MaterialIcons} from "@expo/vector-icons";
 
@@ -18,7 +18,6 @@ const AnimatedHeader = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: 'center',
-            elevation: 4,
         }}>
             <View style={{
                 flexDirection: "row",
@@ -28,7 +27,8 @@ const AnimatedHeader = () => {
                     style={{
                         marginLeft: 20
                     }}
-                    name="youtube" size={32} color="red"/>
+                    name="youtube" size={32} color="red"
+                />
                 <Text style={{
                     fontSize: 20,
                     marginLeft: 5,
@@ -42,9 +42,17 @@ const AnimatedHeader = () => {
                 flexDirection: "row",
                 justifyContent: "space-around",
                 width: 150,
-                margin: 5
+                margin: 5,
             }}>
-                <Ionicons name="md-videocam" size={32} color={"#1d1d1d"}/>
+                <TouchableOpacity
+                    style={{
+                        padding: 5,
+                    }}
+                    onPress={() => console.log("Button Pressed")}
+                >
+                    <Ionicons name="md-videocam" size={32} color={"#1d1d1d" }/>
+                </TouchableOpacity>
+
                 <Ionicons name="md-search" size={32} color={"#1d1d1d"}/>
                 <MaterialIcons
                     name="account-circle"

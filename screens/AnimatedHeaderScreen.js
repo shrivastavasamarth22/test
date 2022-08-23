@@ -6,29 +6,36 @@ import customData from '../MOCK_DATA.json';
 
 const AnimatedHeaderScreen = () => {
     const scrollY = new Animated.Value(0)
-    const diffClamp = Animated.diffClamp(scrollY, 0, 65)
+    const diffClamp = Animated.diffClamp(scrollY, 0, 70)
     const translateY = diffClamp.interpolate({
-        inputRange: [0, 65],
-        outputRange: [0, -65]
+        inputRange: [0, 70],
+        outputRange: [0, -70]
     })
     return (
         <View style={styles.container}>
             <StatusBar style="light" backgroundColor={"black"}/>
-            <Animated.View
+            <View
                 style={{
-                    transform: [
-                        {translateY}
-                    ],
-                    elevation: 4,
-                    zIndex: 100
+                    // transform: [
+                    //     {translateY}
+                    // ],
                 }}
             >
                 <AnimatedHeader/>
-            </Animated.View>
+                <Text style={{
+                    position: 'absolute',
+                    top: 100,
+                    left: 10,
+                }}>
+                    These are some video suggestions :
+                </Text>
+            </View>
+
             <FlatList
                 data={customData}
                 contentContainerStyle={{
-                    marginTop: 65
+                    paddingHorizontal: 10,
+                    paddingTop: 100
                 }}
                 renderItem={({item}) => {
                     return(
@@ -41,9 +48,9 @@ const AnimatedHeaderScreen = () => {
                 }}
 
                 keyExtractor={item => item.id}
-                onScroll={(e)=>{
-                    scrollY.setValue(e.nativeEvent.contentOffset.y)
-                }}
+                // onScroll={(e)=>{
+                //     scrollY.setValue(e.nativeEvent.contentOffset.y)
+                // }}
             />
         </View>
     )

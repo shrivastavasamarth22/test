@@ -4,7 +4,7 @@ import {MaterialIcons} from '@expo/vector-icons'
 
 const Card = (props) => {
     return (
-        <View style={{marginBottom: 10}}>
+        <View style={{marginBottom: 10, backgroundColor: '#ccc', borderRadius: 10}}>
             <Image
                 source={{uri: props.uri}}
                 style={{
@@ -14,7 +14,7 @@ const Card = (props) => {
             />
             <View style={{
                 flexDirection: "row",
-                margin: 5
+                margin: 5,
             }}>
                 <MaterialIcons name="account-circle" size={40} color="#212121"/>
                 <View
