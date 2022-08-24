@@ -13,15 +13,21 @@ const AnimatedHeaderScreen = () => {
         inputRange: [0, 70],
         outputRange: [0, -70]
     })
+    const scaleY = diffClamp.interpolate({
+        inputRange: [0, 70],
+        outputRange: [1, 0.8]
+    })
     return (
         <View style={styles.container}>
             <StatusBar style="light" backgroundColor={"black"}/>
             <Animated.View
                 style={{
-                    transform: [
-                        {translateY}
-                    ],
                     zIndex: 100,
+                    transform: [
+                        {translateY},
+                    ],
+                    height: 65,
+                    backgroundColor: 'red'
                 }}
             >
                 <AnimatedHeader/>
@@ -47,7 +53,7 @@ const AnimatedHeaderScreen = () => {
                 data={customData}
                 contentContainerStyle={{
                     paddingHorizontal: 10,
-                    paddingTop: HEIGHT + 40
+                    paddingTop: 65
                 }}
                 renderItem={({item}) => {
                     return(

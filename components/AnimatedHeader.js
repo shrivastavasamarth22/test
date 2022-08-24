@@ -41,6 +41,7 @@ const AnimatedHeader = () => {
                 justifyContent: "space-around",
                 width: 150,
                 margin: 5,
+                zIndex: 1
             }}>
                 <TouchableOpacity
                     onPress={() => console.log("Button Pressed")}
